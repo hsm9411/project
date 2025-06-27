@@ -1,0 +1,28 @@
+# 기본 PyPI 패키지
+transformers>=4.45
+soundfile
+torch>=2.1
+torchaudio
+datasets
+librosa
+speechbrain
+gradio
+IPython
+
+# CPU 전용 PyTorch 휠을 위한 인덱스 지정 (transformers~speechbrain)
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# Hugging Face optimum-intel (GitHub 설치)
+git+https://github.com/huggingface/optimum-intel.git
+
+# OpenVINO 프리릴리즈 패키지
+openvino>2025.1.0
+openvino-genai
+openvino-tokenizers
+
+--extra-index-url https://storage.openvinotoolkit.org/simple/wheels/pre-release
+
+# macOS 전용 조건 패키지 (numpy < 2.0)
+numpy<2.0.0; platform_system == "Darwin"
+
+optimum[openvino]
