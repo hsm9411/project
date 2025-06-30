@@ -1,20 +1,25 @@
-from gradio_helper import make_demo
+# audio_generator/gradio_runner.py
+
 from .core import AudioGenerator
+from .utils import restore_spacing
+import gradio as gr
 
-def launch_demo(share=True, inbrowser=True, debug=True, server_name=None, server_port=None):
-    generator = AudioGenerator()
-    pipe = generator.pipe
+generator = AudioGenerator()
 
-    demo = make_demo(pipe)
+def inference(user_input):
+    restored = restore_spacing(user_input)
+    print(f"🧠 복원된 문장: {restored}")
+    audio_path = generator.generate(restored)
+    return audio_path, restored  # 복원된 문장도 함께 출력
 
-    launch_kwargs = dict(share=share, inbrowser=inbrowser, debug=debug)
-
-    if server_name:
-        launch_kwargs["server_name"] = server_name
-    if server_port:
-        launch_kwargs["server_port"] = server_port
-
-    try:
-        demo.launch(**launch_kwargs)
-    except Exception:
-        demo.launch(share=True, debug=True)
+def launch_demo():
+    demo = gr.Interface(
+        fn=inference,
+        inputs=gr.Textbox(lines=2, label="📥 영어 입력"),
+        outputs=[
+            gr.Audio(label="📤 출력 음성"),
+            gr.Textbox(label="📝 복원된 문장 (TTS 입력)")
+        ],
+        title="🗣️ 영어 TTS + 띄어쓰기 복원"
+    )
+    demo.launch(inbrowser=True, share=True)
