@@ -26,3 +26,5 @@ openvino-tokenizers
 numpy<2.0.0; platform_system == "Darwin"
 
 optimum[openvino]
+
+wordsegment
